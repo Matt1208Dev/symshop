@@ -1,11 +1,11 @@
-index:
-   path: /
-   controller: App\Controller\TestController::index
+# index:
+#    path: /
+#    controller: App\Controller\TestController::index
 
-test:
-   path: /test/{age}
-   controller: App\Controller\TestController::test
-   defaults:
-      age: 0
-   requirements:
-      age: \d+
+# test:
+#    path: /test/{age}
+#    controller: App\Controller\TestController::test
+#    defaults:
+#       age: 0
+#    requirements:
+#       age: \d+
