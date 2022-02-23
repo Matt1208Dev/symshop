@@ -12,6 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CategoryController extends AbstractController
 {
@@ -22,11 +23,14 @@ class CategoryController extends AbstractController
         $this->categoryRepository = $categoryRepository;
     }
 
+    /**
+     * Méthode permettant de charger les catégories dans la navbar, en utilisant la fonction d'appel d'un controller dans le template Twig
+     */
     public function renderMenuList()
     {
         $categories = $this->categoryRepository->findAll();
 
-        return $this->render('category/_menu.htmml.twig', [
+        return $this->render('category/_menu.html.twig', [
             'categories' => $categories
         ]);
     }
@@ -59,13 +63,15 @@ class CategoryController extends AbstractController
     }
 
     /**
-     * @Route("/admin/category/{id}/edit", name="category_edit")
+     * @Route("/admin/category/{id}/edit", name="category_edit", requirements={"id": "\d+"})
      */
     public function edit($id, CategoryRepository $categoryRepository, Request $request, SluggerInterface $slugger, EntityManagerInterface $em)
     {
-        // $this->denyAccessUnlessGranted("ROLE_ADMIN", null, "Vous n'avez pas le droit d'accéder à cette ressource");
-
         $category = $categoryRepository->find($id);
+
+        if(!$category) {
+            throw new NotFoundHttpException("Cette catégorie n'existe pas.");
+        }
 
         $form = $this->createForm(CategoryType::class, $category);
 
