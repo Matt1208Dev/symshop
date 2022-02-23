@@ -3,31 +3,21 @@
 namespace App\Controller;
 
 use App\Entity\Product;
-use App\Entity\Category;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
 use App\Repository\CategoryRepository;
-use Bezhanov\Faker\Provider\Placeholder;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\MoneyType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ProductController extends AbstractController
 {
     /**
-     * @Route("/{slug}", name="product_category")
+     * @Route("/{slug}", name="product_category", priority=-1)
      */
     public function category($slug, CategoryRepository $categoryRepository): Response
     {
@@ -64,8 +54,65 @@ class ProductController extends AbstractController
     /**
      * @Route("/admin/product/{id}/edit", name="product_edit")
      */
-    public function edit($id, ProductRepository $productRepository, Request $request, EntityManagerInterface $em)
+    public function edit($id, ProductRepository $productRepository, Request $request, EntityManagerInterface $em, ValidatorInterface $validator)
     {
+        // Validation via consultation par le Validator d'un fichier YAML (product.yaml)
+        $product = new Product;
+
+        $resultat = $validator->validate($product);
+
+        if ($resultat->count() > 0) {
+
+            dd("Il y a des erreurs", $resultat);
+        }
+
+        dd("Tout va bien", $resultat);
+
+        // Validation de données simples (scalaires)
+        // $age = 200;
+
+        // $resultat = $validator->validate($age, [
+        //     new LessThanOrEqual([
+        //         'value' => 120,
+        //         'message' => "L'âge doit être inférieur à {{ compared_value }} mais vous avez donné {{ value }}"
+        //     ]),
+        //     new GreaterThan([
+        //         'value' => 0,
+        //         'message' => "L'âge doit être supérieur à 0"
+        //     ])
+        // ]);
+
+        // Validation de données complexes (tableaux)
+        // $client = [
+        //     'nom' => 'Gueulle',
+        //     'prenom' => '',
+        //     'voiture' => [
+        //         'marque' => 'Renault',
+        //         'couleur' => 'Noire'
+        //     ]
+        // ];
+
+        // $collection = new Collection([
+        //     'nom' => new NotBlank(['message' => "Le nom ne doit pas être vide"]),
+        //     'prenom' => [
+        //         new NotBlank(['message' => "Le prénom ne doit pas être vide"]),
+        //         new Length(['min' => 3, 'minMessage' => "Le prénom ne doit pas faire moins de 3 caractères"])
+        //     ],
+        //     'voiture' => new Collection([
+        //         'marque' => new NotBlank(['message' => "La marque de la voiture est obligatoire"]),
+        //         'couleur' => new NotBlank(['message' => "La couleur est obligatoire"])
+        //     ])
+        // ]);
+
+        // $resultat = $validator->validate($client, $collection);
+
+        // if ($resultat->count() > 0) {
+
+        //     dd("Il y a des erreurs", $resultat);
+        // }
+
+        // dd("Tout va bien", $resultat);
+
         $product = $productRepository->find($id);
 
         $form = $this->createForm(ProductType::class, $product);

@@ -2,8 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\ProductRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ProductRepository;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 /**
  * @ORM\Entity(repositoryClass=ProductRepository::class)
@@ -46,6 +49,16 @@ class Product
      * @ORM\Column(type="text")
      */
     private $shortDescription;
+
+    // Validation d'objet en PHP
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
+    {
+        $metadata->addPropertyConstraints('name', [
+            new NotBlank(['message' => 'Le nom du produit est obligatoire']),
+            new Length(['min' => 3, 'max' => 255, 'minMessage' => 'Le nom du produit doit comporter au moins 3 caractères'])
+        ]);
+        $metadata->addPropertyConstraint('price', new NotBlank(['message' => 'Le prix est obligatoire']));
+    }
 
     public function getId(): ?int
     {
