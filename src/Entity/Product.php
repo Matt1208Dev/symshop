@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ProductRepository;
 use Symfony\Component\Validator\Constraints\Length;
@@ -49,6 +51,16 @@ class Product
      * @ORM\Column(type="text")
      */
     private $shortDescription;
+
+    /**
+     * @ORM\OneToMany(targetEntity=PurchaseItem::class, mappedBy="product")
+     */
+    private $purchaseItems;
+
+    public function __construct()
+    {
+        $this->purchaseItems = new ArrayCollection();
+    }
 
     // Validation d'objet en PHP
     public static function loadValidatorMetadata(ClassMetadata $metadata)
@@ -141,4 +153,35 @@ class Product
 
         return $this;
     }
+
+    /**
+     * @return Collection|PurchaseItem[]
+     */
+    public function getPurchaseItems(): Collection
+    {
+        return $this->purchaseItems;
+    }
+
+    public function addPurchaseItem(PurchaseItem $purchaseItem): self
+    {
+        if (!$this->purchaseItems->contains($purchaseItem)) {
+            $this->purchaseItems[] = $purchaseItem;
+            $purchaseItem->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removePurchaseItem(PurchaseItem $purchaseItem): self
+    {
+        if ($this->purchaseItems->removeElement($purchaseItem)) {
+            // set the owning side to null (unless already changed)
+            if ($purchaseItem->getProduct() === $this) {
+                $purchaseItem->setProduct(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

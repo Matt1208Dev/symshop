@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Cart\CartService;
+use App\Form\CartConfirmationType;
 use App\Repository\ProductRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,7 +30,7 @@ class CartController extends AbstractController
     {
         $product = $this->productRepository->find($id);
 
-        if(!$product) {
+        if (!$product) {
             throw $this->createNotFoundException("Le produit $id n'existe pas.");
         }
 
@@ -37,12 +38,12 @@ class CartController extends AbstractController
 
         // /** @var FlashBag */
         // $flashBag = $session->getBag('flashes');
-        
+
         // $flashBag->add('success', "Le produit a bien été ajouté au panier");
 
         $this->addFlash('success', "Le produit a bien été ajouté au panier");
 
-        if($request->query->get('returnToCart')) {
+        if ($request->query->get('returnToCart')) {
             return $this->redirectToRoute('cart_show');
         }
 
@@ -55,7 +56,9 @@ class CartController extends AbstractController
     /**
      * @Route("/cart", name="cart_show")
      */
-    public function show() {
+    public function show()
+    {
+        $form = $this->createForm(CartConfirmationType::class);
 
         $detailedCart = $this->cartService->getDetailedCartItems();
 
@@ -63,7 +66,8 @@ class CartController extends AbstractController
 
         return $this->render('cart/index.html.twig', [
             'items' => $detailedCart,
-            'total' => $total
+            'total' => $total,
+            'confirmationForm' => $form->createView()
         ]);
     }
 
@@ -74,7 +78,7 @@ class CartController extends AbstractController
     {
         $product = $this->productRepository->find($id);
 
-        if(!$product) {
+        if (!$product) {
             throw $this->createNotFoundException("Le produit $id n'existe pas et ne peut pas être supprimé !");
         }
 
@@ -88,10 +92,11 @@ class CartController extends AbstractController
     /**
      * @Route("/cart/decrement/{id}", name="cart_decrement", requirements={"id": "\d+"})
      */
-    public function decrement($id) {
+    public function decrement($id)
+    {
         $product = $this->productRepository->find($id);
 
-        if(!$product) {
+        if (!$product) {
             throw $this->createNotFoundException("Le produit $id n'existe pas et ne peut pas être supprimé !");
         }
 
