@@ -46,12 +46,12 @@ class AppFixtures extends Fixture
         for ($u = 0; $u < 5; $u++) {
             $user = new User();
 
-        $hash = $this->encoder->encodePassword($user, "password");
+            $hash = $this->encoder->encodePassword($user, "password");
 
             $user->setEmail("user$u@gmail.com")
                 ->setFullName($faker->name())
                 ->setPassword($hash);
-            
+
             $users[] = $user;
 
             $manager->persist($user);
@@ -61,8 +61,8 @@ class AppFixtures extends Fixture
 
         for ($c = 0; $c < 3; $c++) {
             $category = new Category;
-            $category->setName($faker->department)
-                ->setSlug($this->slugger->slug($category->getName()));
+            $category->setName($faker->department);
+            // ->setSlug($this->slugger->slug($category->getName()));
 
             $manager->persist($category);
 
@@ -70,7 +70,7 @@ class AppFixtures extends Fixture
                 $product = new Product;
                 $product->setName($faker->productname())
                     ->setPrice($faker->price(4000, 20000))
-                    ->setSlug(strtolower($this->slugger->slug($product->getName())))
+                    // ->setSlug(strtolower($this->slugger->slug($product->getName())))
                     ->setCategory($category)
                     ->setShortDescription($faker->paragraph())
                     ->setMainPicture($faker->imageUrl(400, 400, true));
@@ -81,7 +81,7 @@ class AppFixtures extends Fixture
             }
         }
 
-        for($p = 0; $p < mt_rand(20, 40); $p++) {
+        for ($p = 0; $p < mt_rand(20, 40); $p++) {
             $purchase = new Purchase;
 
             $purchase->setFullName($faker->name)
@@ -107,7 +107,7 @@ class AppFixtures extends Fixture
                 $manager->persist($purchaseItem);
             }
 
-            if($faker->boolean(90)) {
+            if ($faker->boolean(90)) {
                 $purchase->setStatus(Purchase::STATUS_PAID);
             }
 
