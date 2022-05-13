@@ -10,7 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class PurchasePaymentSuccessController extends AbstractController
 {
@@ -18,7 +18,7 @@ class PurchasePaymentSuccessController extends AbstractController
      * @Route("/purchase/terminate/{id}", name="purchase_payment_success")
      * @IsGranted("ROLE_USER")
      */
-    public function success($id, PurchaseRepository $purchaseRepository, EntityManagerInterface $em, CartService $cartService, EventDispatcher $dispatcher) {
+    public function success($id, PurchaseRepository $purchaseRepository, EntityManagerInterface $em, CartService $cartService, EventDispatcherInterface $dispatcher) {
         // Récupération de la commande
         $purchase = $purchaseRepository->find($id);
 
