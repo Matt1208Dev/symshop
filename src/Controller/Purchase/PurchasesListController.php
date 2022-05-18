@@ -2,6 +2,10 @@
 
 namespace App\Controller\Purchase;
 
+use Knp\Snappy\Pdf;
+use App\Entity\User;
+use App\Repository\PurchaseRepository;
+use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use Twig\Environment;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,5 +43,31 @@ class PurchasesListController extends AbstractController
         return $this->render('purchase/index.html.twig', [
             'purchases' => $user->getPurchases()
         ]);
+    }
+
+    /**
+     * @Route("/purchase/{id}/pdf", name="purchase_pdf")
+     * @IsGranted("ROLE_USER", message="Vous devez être connecté pour accéder à vos commandes")
+     */
+    public function pdfAction($id, PurchaseRepository $purchaseRepository,Pdf $pdf)
+    {
+        /**
+         * @var User
+         */
+        $user = $this->getUser();
+
+        $purchase = $purchaseRepository->find($id);
+
+        $html = $this->renderView('purchase/purchase_pdf.html.twig', [
+            'purchase' => $purchase,
+            'user' => $user
+        ]);
+
+        return new PdfResponse(
+            $pdf->getOutputFromHtml($html, [
+                'encoding' => 'utf-8'
+            ]),
+            $id . '.pdf'
+        );
     }
 }

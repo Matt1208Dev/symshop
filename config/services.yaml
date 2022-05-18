@@ -35,6 +35,8 @@ services:
 
     App\Twig: ~
 
+    App\knp_snappy: ~
+
     App\Stripe\StripeService:
         arguments:
             $secretKey: "%env(STRIPE_SECRET_KEY)%"

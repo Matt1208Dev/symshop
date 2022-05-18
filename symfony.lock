@@ -109,6 +109,21 @@
     "friendsofphp/proxy-manager-lts": {
         "version": "v1.0.5"
     },
+    "knplabs/knp-snappy": {
+        "version": "v1.4.1"
+    },
+    "knplabs/knp-snappy-bundle": {
+        "version": "1.9",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "1.5",
+            "ref": "c81bdcf4a9d4e7b1959071457f9608631865d381"
+        },
+        "files": [
+            "config/packages/knp_snappy.yaml"
+        ]
+    },
     "laminas/laminas-code": {
         "version": "4.5.1"
     },
@@ -171,6 +186,9 @@
         "files": [
             "bin/console"
         ]
+    },
+    "symfony/css-selector": {
+        "version": "v5.1.11"
     },
     "symfony/debug-bundle": {
         "version": "5.1",
@@ -324,6 +342,9 @@
     "symfony/polyfill-php80": {
         "version": "v1.23.1"
     },
+    "symfony/process": {
+        "version": "v5.1.11"
+    },
     "symfony/property-access": {
         "version": "v5.1.11"
     },
@@ -436,8 +457,17 @@
     "symfony/yaml": {
         "version": "v5.1.11"
     },
+    "tijsverkoyen/css-to-inline-styles": {
+        "version": "2.2.4"
+    },
+    "twig/cssinliner-extra": {
+        "version": "v3.4.0"
+    },
     "twig/extra-bundle": {
         "version": "v3.3.4"
+    },
+    "twig/intl-extra": {
+        "version": "v3.3.5"
     },
     "twig/twig": {
         "version": "v3.3.4"

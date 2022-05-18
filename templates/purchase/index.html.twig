@@ -15,6 +15,7 @@
 				<th>Date de commande</th>
 				<th>Produits</th>
 				<th>Total</th>
+				<th></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -34,6 +35,7 @@
 					</td>
 					<td>{{ p.total / 100 }}
 						€</td>
+					<td><a class="btn btn-primary" href="{{ path('purchase_pdf', {'id': p.id }) }}">Voir le PDF</a></a></td>
 				</tr>
 			{% endfor %}
 		</tbody>

@@ -1,0 +1,17 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    
+    <h1>Facture n° {{ purchase.id }}</h1>
+
+<div class="row">
+    <div class="col-6">
+        {{ user.fullName }}
+    </div>
+    <div class="col-6">
+         {{ purchase.purchasedAt | format_datetime(locale='fr') }}
+    </div>
+</div>
+ 
+{% endblock %}
+

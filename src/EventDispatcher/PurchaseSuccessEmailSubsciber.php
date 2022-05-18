@@ -47,7 +47,7 @@ class PurchaseSuccessEmailSubsciber implements EventSubscriberInterface
                 'purchase' => $purchase,
                 'user' => $currentUser
             ]);
-            
+
         // 4. Envoyer l'email
         $this->mailer->send($email);
     }
